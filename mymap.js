@@ -1,38 +1,15 @@
+import {showPropsectPreview} from './myUI.js';
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import Feature from 'ol/Feature.js';
 import Point from 'ol/geom/Point.js';
 import {fromLonLat} from 'ol/proj.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import {Control} from 'ol/control.js';
 import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Style, Icon} from 'ol/style.js';
 import mapmarker from './mapmarker.png'
-import filter from './menu.png'
 
-export async function getMap(locations) {
-  const image = document.createElement('img');
-  image.setAttribute('src', filter);
-  image.setAttribute('class', 'filter');
-  
-  const button = document.createElement('button');
-
-  const showFilter = function(e) {
-    console.log('show filter');
-  };
-
-  button.addEventListener('click', showFilter, false);
-  button.appendChild(image);
-
-  const element = document.createElement('div');
-  element.className = 'custom-control ol-unselectable ol-control';
-  element.appendChild(button);
-
-
-  var FilterControl = new Control({
-    element: element
-  });
-
+export async function getMap(items) {
   const map = new Map({
     target: 'map',
     layers: [
@@ -48,15 +25,18 @@ export async function getMap(locations) {
     })
   });
 
-  map.addControl(FilterControl);
-
-  const markers = locations.map(location => {
+  const markers = items.map(item => {
     const marker = new Feature({
       type: 'marker',
       geometry: new Point(
-        fromLonLat([location.lon, location.lat])
+        fromLonLat([item.location.lon, item.location.lat])
       )
     });
+
+    marker.data = {
+      id: item.id
+    };
+
     return marker
   });
 
@@ -83,6 +63,16 @@ export async function getMap(locations) {
   });
 
   map.addLayer(markerVectorLayer);
+
+  map.on('singleclick', function(e) {
+    const feature = map.forEachFeatureAtPixel(e.pixel, function(feature) {
+      return feature;
+    });
+
+    if(feature !== undefined) {
+      showPropsectPreview(feature.data.id);
+    }
+  });
 
   return map;
 }

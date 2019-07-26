@@ -1,6 +1,6 @@
 import { Client } from 'elasticsearch'
  
-export async function getLocations() {
+export async function getItems() {
   const client = new Client({
     host: 'https://search-estate-i2mq74bcsxvndr5fumr3evo4wi.eu-west-1.es.amazonaws.com'
   });
@@ -23,8 +23,11 @@ export async function getLocations() {
   if(hits.length > 0) {
     locations = hits.map(hit => {
       return {
-        lat: parseFloat(hit._source.location.lat),
-        lon: parseFloat(hit._source.location.lon),
+        id: hit._id,
+        location: {
+          lat: parseFloat(hit._source.location.lat),
+          lon: parseFloat(hit._source.location.lon)
+        }
       };
     })
   }
