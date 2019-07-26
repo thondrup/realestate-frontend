@@ -1,8 +1,16 @@
 import 'babel-polyfill';
 import { getMap } from './mymap'
-import { getItems } from './myelastic'
+import { search } from './myelastic'
 
 (async () => {
-  const items= await getItems();
+  const queryParams = {
+    categories: ['villa'],
+    minArea: 45,
+    maxPrice: 8000
+  }
+
+  const items = await search(queryParams);
+  console.log('Found:', items.length);
+  
   const map = await getMap(items); 
 })();
