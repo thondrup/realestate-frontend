@@ -69,9 +69,18 @@ export async function getMap(items) {
       return feature;
     });
 
-    if(feature !== undefined) {
+    if(feature) {
       showPropsectPreview(feature.data.id);
     }
+  });
+
+  map.on('pointermove', function(e) {
+    if (e.dragging) {
+      return;
+    }
+    const pixel = map.getEventPixel(e.originalEvent);
+    const hit = map.hasFeatureAtPixel(pixel);
+    map.getTargetElement().style.cursor = hit ? 'pointer' : '';
   });
 
   return map;
