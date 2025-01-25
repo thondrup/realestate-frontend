@@ -1,6 +1,6 @@
 {
   "name": "estate-frontend",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "parcel build --public-url . index.html"
   },
   "keywords": [],
-  "author": "Christoffer Nawang Aarøy Thondrup <christoffer.thondrup@gmail.com>",
+  "author": "peaspls",
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
